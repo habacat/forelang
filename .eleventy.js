@@ -3,9 +3,23 @@ const markdownIt = require("markdown-it");
 const mdAnchor = require("markdown-it-anchor");
 const mdKatex = require("markdown-it-katex");
 
-function cjkSlug(s){
+function slugAll(s){
   if(!s) return "";
-  return encodeURIComponent(String(s).trim().replace(/\s+/g,'-'));
+  const raw = String(s).trim();
+  // Try a simple ASCII slug first
+  const ascii = raw
+    .normalize("NFKD")
+    .replace(/\s+/g,"-")
+    .replace(/[^\x00-\x7F]/g,"")
+    .replace(/[^a-zA-Z0-9\-]/g,"")
+    .toLowerCase();
+  if(ascii) return ascii;
+  // Fallback: hex of code points for CJK and other non-ASCII
+  let hex = "";
+  for(const ch of raw){
+    hex += ch.codePointAt(0).toString(16);
+  }
+  return hex;
 }
 
 module.exports = function(eleventyConfig) {
@@ -21,7 +35,7 @@ module.exports = function(eleventyConfig) {
     return `${x.getFullYear()}.${pad(x.getMonth()+1)}.${pad(x.getDate())}`;
   });
   eleventyConfig.addFilter("truncate", (s,n)=>{ if(!s) return ""; s=String(s); return s.length>n ? s.slice(0,n)+"…" : s; });
-  eleventyConfig.addFilter("slug", cjkSlug);
+  eleventyConfig.addFilter("slug", slugAll);
   eleventyConfig.addFilter("readingTime", content=>{
     const words = (content||"").split(/\s+/).filter(Boolean).length;
     return `${Math.max(1,Math.round(words/250))} min`;
@@ -69,7 +83,7 @@ module.exports = function(eleventyConfig) {
 
   const md = markdownIt({html:true, linkify:true, typographer:true})
     .use(mdKatex)
-    .use(mdAnchor, {slugify: cjkSlug});
+    .use(mdAnchor, {slugify: slugAll});
   eleventyConfig.setLibrary("md", md);
 
   return {
