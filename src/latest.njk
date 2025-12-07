@@ -8,7 +8,7 @@ permalink: /latest/index.html
   <div class="grid">
     {% for p in collections.posts %}
       <article class="card">
-        <div class="cover"><img src="{{ p.data.cover | default(site.base + 'assets/img/cover-demo.jpg') }}"></div>
+        <div class="cover"><a href="{{ p.url | url }}"><img src="{{ p.data.cover | default(site.base + 'assets/img/cover-demo.jpg') }}"></a></div>
         <div class="body">
           <div class="meta">{{ p.date | date }}</div>
           <h3><a href="{{ p.url | url }}">{{ p.data.title }}</a></h3>

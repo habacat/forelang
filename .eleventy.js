@@ -27,7 +27,8 @@ module.exports = function(eleventyConfig) {
     return `${Math.max(1,Math.round(words/250))} min`;
   });
   eleventyConfig.addFilter("indexOf", (arr, page)=>arr.findIndex(i=>i.url===page.url));
-  // HTML -> TOC (extract h2/h3 headings from rendered HTML)
+
+  // HTML -> TOC filter (from rendered HTML)
   eleventyConfig.addFilter("toc", function (html) {
     if(!html) return "";
     const tagre = /<(h2|h3)[^>]*id="([^"]+)"[^>]*>(.*?)<\/\1>/gsi;
@@ -66,7 +67,6 @@ module.exports = function(eleventyConfig) {
     return Object.entries(counts).map(([tag,count])=>({tag,count})).sort((a,b)=>b.count-a.count);
   });
 
-  // markdown
   const md = markdownIt({html:true, linkify:true, typographer:true})
     .use(mdKatex)
     .use(mdAnchor, {slugify: cjkSlug});

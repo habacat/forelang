@@ -34,8 +34,8 @@ permalink: /catalog/{% if pagination.pageNumber > 0 %}page/{{ pagination.pageNum
     {% endfor %}
 
     <div class="paginate">
-      <div>{% if pagination.href.previous %}<a class="page-btn" href="{{ pagination.href.previous }}">← prev</a>{% endif %}</div>
-      <div>{% if pagination.href.next %}<a class="page-btn" href="{{ pagination.href.next }}">next →</a>{% endif %}</div>
+      <div>{% if pagination.href.previous %}<a class="page-btn" href="{{ pagination.href.previous | url }}">← prev</a>{% endif %}</div>
+      <div>{% if pagination.href.next %}<a class="page-btn" href="{{ pagination.href.next | url }}">next →</a>{% endif %}</div>
     </div>
   </section>
 </div>
