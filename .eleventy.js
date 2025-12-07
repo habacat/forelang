@@ -1,11 +1,14 @@
-
 const markdownIt = require("markdown-it");
 const mdAnchor = require("markdown-it-anchor");
 const mdKatex = require("markdown-it-katex");
 
+// Keep CJK characters unencoded for filesystem paths and URLs.
+// Replace spaces with '-' and strip unsafe punctuation, but DO NOT percent-encode.
 function cjkSlug(s){
   if(!s) return "";
-  return encodeURIComponent(String(s).trim().replace(/\s+/g,'-'));
+  s = String(s).trim().replace(/\s+/g, "-");
+  // Keep: Latin letters/digits/_-, CJK (中日韓), Hiragana/Katakana, Hangul.
+  return s.replace(/[^A-Za-z0-9_\-\u4E00-\u9FFF\u3040-\u30FF\uAC00-\uD7AF]+/g, "");
 }
 
 module.exports = function(eleventyConfig) {
@@ -14,7 +17,6 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/robots.txt");
   eleventyConfig.addPassthroughCopy("src/posts/**/*.pdf");
 
-  // filters
   eleventyConfig.addFilter("date", (d) => {
     const x = new Date(d);
     const pad = (n)=>String(n).padStart(2,"0");
@@ -28,45 +30,7 @@ module.exports = function(eleventyConfig) {
   });
   eleventyConfig.addFilter("indexOf", (arr, page)=>arr.findIndex(i=>i.url===page.url));
 
-  // HTML -> TOC filter (from rendered HTML)
-  eleventyConfig.addFilter("toc", function (html) {
-    if(!html) return "";
-    const tagre = /<(h2|h3)[^>]*id="([^"]+)"[^>]*>(.*?)<\/\1>/gsi;
-    const all = []; let m;
-    while((m = tagre.exec(html))){
-      const level = m[1] === 'h2' ? 2 : 3;
-      all.push({level, id: m[2], text: m[3].replace(/<[^>]+>/g,"")});
-    }
-    if(!all.length) return "";
-    let out = '<div class="toc-title">章节预览</div><ol>';
-    let h2=0,h3=0,open=false;
-    for(const it of all){
-      if(it.level===2){
-        if(open){ out += "</ol></li>"; open=false; h3=0; }
-        h2++; out += `<li><a href="#${it.id}">${h2}. ${it.text}</a>`;
-      }else{
-        if(!open){ out += "<ol>"; open=true; }
-        h3++; out += `<li><a href="#${it.id}">${h2}.${h3} ${it.text}</a></li>`;
-      }
-    }
-    if(open){ out += "</ol>"; }
-    out += "</li></ol>";
-    return out;
-  });
-
-  // collections
-  eleventyConfig.addCollection("posts", api =>
-    api.getFilteredByGlob("src/posts/**/*.{md,html}")
-       .sort((a,b)=>b.date-a.date)
-  );
-  eleventyConfig.addCollection("tagList", api => {
-    const counts = {};
-    api.getFilteredByGlob("src/posts/**/*.{md,html}").forEach(item=>{
-      (item.data.tags||[]).forEach(t=>{ if(t==="post") return; counts[t]=(counts[t]||0)+1; });
-    });
-    return Object.entries(counts).map(([tag,count])=>({tag,count})).sort((a,b)=>b.count-a.count);
-  });
-
+  // Use markdown-it with anchor; DO NOT override Eleventy's built-in 'url' filter.
   const md = markdownIt({html:true, linkify:true, typographer:true})
     .use(mdKatex)
     .use(mdAnchor, {slugify: cjkSlug});
