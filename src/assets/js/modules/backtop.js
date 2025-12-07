@@ -1,6 +1,1 @@
-
-(()=>{
-  const b=document.querySelector('#backTop'); if(!b) return;
-  window.addEventListener('scroll', ()=>{ b.style.display = window.scrollY>600 ? 'block' : 'none'; });
-  b.addEventListener('click', ()=>window.scrollTo({top:0,behavior:'smooth'}));
-})();
+(()=>{const b=document.querySelector('#backTop');if(!b)return;window.addEventListener('scroll',()=>{b.style.display=window.scrollY>600?'block':'none'});b.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));})();

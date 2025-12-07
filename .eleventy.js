@@ -1,7 +1,6 @@
 
 const markdownIt = require("markdown-it");
 const mdAnchor = require("markdown-it-anchor");
-const mdToc = require("markdown-it-table-of-contents");
 const mdKatex = require("markdown-it-katex");
 
 function cjkSlug(s){
@@ -21,11 +20,7 @@ module.exports = function(eleventyConfig) {
     const pad = (n)=>String(n).padStart(2,"0");
     return `${x.getFullYear()}.${pad(x.getMonth()+1)}.${pad(x.getDate())}`;
   });
-  eleventyConfig.addFilter("truncate", (s,n)=>{
-    if(!s) return "";
-    s = String(s);
-    return s.length>n ? s.slice(0,n) + "…" : s;
-  });
+  eleventyConfig.addFilter("truncate", (s,n)=>{ if(!s) return ""; s=String(s); return s.length>n ? s.slice(0,n)+"…" : s; });
   eleventyConfig.addFilter("slug", cjkSlug);
   eleventyConfig.addFilter("readingTime", content=>{
     const words = (content||"").split(/\s+/).filter(Boolean).length;
@@ -34,19 +29,41 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addFilter("indexOf", (arr, page)=>arr.findIndex(i=>i.url===page.url));
   eleventyConfig.addFilter("url", u=>u);
 
+  // HTML -> TOC (extract h2/h3 headings from rendered HTML)
+  eleventyConfig.addFilter("toc", function (html) {
+    if(!html) return "";
+    const tagre = /<(h2|h3)[^>]*id="([^"]+)"[^>]*>(.*?)<\/\1>/gsi;
+    const all = []; let m;
+    while((m = tagre.exec(html))){
+      const level = m[1] === 'h2' ? 2 : 3;
+      all.push({level, id: m[2], text: m[3].replace(/<[^>]+>/g,"")});
+    }
+    if(!all.length) return "";
+    let out = '<div class="toc-title">章节预览</div><ol>';
+    let h2=0,h3=0,open=false;
+    for(const it of all){
+      if(it.level===2){
+        if(open){ out += "</ol></li>"; open=false; h3=0; }
+        h2++; out += `<li><a href="#${it.id}">${h2}. ${it.text}</a>`;
+      }else{
+        if(!open){ out += "<ol>"; open=true; }
+        h3++; out += `<li><a href="#${it.id}">${h2}.${h3} ${it.text}</a></li>`;
+      }
+    }
+    if(open){ out += "</ol>"; }
+    out += "</li></ol>";
+    return out;
+  });
+
   // collections
   eleventyConfig.addCollection("posts", api =>
     api.getFilteredByGlob("src/posts/**/*.{md,html}")
        .sort((a,b)=>b.date-a.date)
   );
-
   eleventyConfig.addCollection("tagList", api => {
     const counts = {};
     api.getFilteredByGlob("src/posts/**/*.{md,html}").forEach(item=>{
-      (item.data.tags||[]).forEach(t=>{
-        if(t==="post") return;
-        counts[t]=(counts[t]||0)+1;
-      });
+      (item.data.tags||[]).forEach(t=>{ if(t==="post") return; counts[t]=(counts[t]||0)+1; });
     });
     return Object.entries(counts).map(([tag,count])=>({tag,count})).sort((a,b)=>b.count-a.count);
   });
@@ -54,8 +71,7 @@ module.exports = function(eleventyConfig) {
   // markdown
   const md = markdownIt({html:true, linkify:true, typographer:true})
     .use(mdKatex)
-    .use(mdAnchor, {slugify: cjkSlug})
-    .use(mdToc, {includeLevel:[2,3], containerHeaderHtml:'<div class="toc-title">章节预览</div>'});
+    .use(mdAnchor, {slugify: cjkSlug});
   eleventyConfig.setLibrary("md", md);
 
   return {
