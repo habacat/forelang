@@ -1,14 +1,10 @@
 
-// theme.js - dark/light toggle with localStorage
-(() => {
-  const qs = s => document.querySelector(s);
-  const toggle = qs('#theme-toggle');
-  const root = document.documentElement;
-  const saved = localStorage.getItem('theme');
-  if(saved) root.setAttribute('data-theme', saved);
-  toggle?.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
+(()=>{
+  const t=document.querySelector('#theme-toggle');
+  const r=document.documentElement;
+  const s=localStorage.getItem('theme'); if(s) r.setAttribute('data-theme', s);
+  t?.addEventListener('click', ()=>{
+    const next = r.getAttribute('data-theme')==='dark'?'light':'dark';
+    r.setAttribute('data-theme', next); localStorage.setItem('theme', next);
   });
 })();

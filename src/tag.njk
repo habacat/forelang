@@ -1,0 +1,37 @@
+
+---
+pagination:
+  data: collections.tagList
+  size: 1
+  alias: tag
+permalink: /tags/{{ tag.tag | slug }}/index.html
+layout: layouts/base.njk
+eleventyComputed:
+  title: "tag：{{ tag.tag }}"
+---
+<div class="container">
+  <h1>标签：{{ tag.tag }}</h1>
+  <div class="list-page" style="gap:2rem">
+    <aside class="tag-cloud left">
+      <div>tags：</div>
+      {% for t in collections.tagList %}
+        <a href="{{ site.base }}tags/{{ t.tag | slug }}/" data-size="md">{{ t.tag }}</a>
+      {% endfor %}
+    </aside>
+
+    <section class="right">
+      {% for p in collections.posts %}
+        {% if p.data.tags and (tag.tag in p.data.tags) %}
+        <article class="entry">
+          <div class="media"><img src="{{ p.data.cover | default(site.base + 'assets/img/cover-demo.jpg') }}" alt=""></div>
+          <div class="content">
+            <div class="meta">{{ p.date | date }} · {{ p.data.tags | join(', ') }}</div>
+            <h3><a href="{{ p.url }}">{{ p.data.title }}</a></h3>
+            <p>{{ p.data.summary | default(p.templateContent) | striptags | truncate(160) }}</p>
+          </div>
+        </article>
+        {% endif %}
+      {% endfor %}
+    </section>
+  </div>
+</div>

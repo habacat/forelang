@@ -8,8 +8,8 @@ pagination:
   alias: posts
 permalink: /catalog/{% if pagination.pageNumber > 0 %}page/{{ pagination.pageNumber + 1 }}/{% endif %}index.html
 ---
-<div class="container list" style="gap:2rem">
-  <aside class="tag-cloud">
+<div class="container list-page" style="gap:2rem">
+  <aside class="tag-cloud left">
     <div>tags：</div>
     {% for t in collections.tagList %}
       {% set size = "md" %}
@@ -24,27 +24,19 @@ permalink: /catalog/{% if pagination.pageNumber > 0 %}page/{{ pagination.pageNum
 
   <section class="right">
     {% for p in posts %}
-      <article class="card">
-        <div class="cover"><img src="{{ p.data.cover | default(site.base + 'assets/img/cover-demo.jpg') }}" alt=""></div>
-        <div class="body">
+      <article class="entry">
+        <div class="media"><img src="{{ p.data.cover | default(site.base + 'assets/img/cover-demo.jpg') }}" alt=""></div>
+        <div class="content">
           <div class="meta">{{ p.date | date }} · {{ p.data.tags | join(', ') }}</div>
-          <h3 style="margin:.2rem 0"><a href="{{ p.url }}">{{ p.data.title }}</a></h3>
-          <p style="color:var(--muted)">{{ p.data.summary | default(p.templateContent) | striptags | truncate(160) }}</p>
+          <h3><a href="{{ p.url }}">{{ p.data.title }}</a></h3>
+          <p>{{ p.data.summary | default(p.templateContent) | striptags | truncate(160) }}</p>
         </div>
       </article>
     {% endfor %}
 
     <div class="paginate">
-      <div>
-        {% if pagination.href.previous %}
-          <a class="page-btn" href="{{ pagination.href.previous }}">← prev</a>
-        {% endif %}
-      </div>
-      <div>
-        {% if pagination.href.next %}
-          <a class="page-btn" href="{{ pagination.href.next }}">next →</a>
-        {% endif %}
-      </div>
+      <div>{% if pagination.href.previous %}<a class="page-btn" href="{{ pagination.href.previous }}">← prev</a>{% endif %}</div>
+      <div>{% if pagination.href.next %}<a class="page-btn" href="{{ pagination.href.next }}">next →</a>{% endif %}</div>
     </div>
   </section>
 </div>

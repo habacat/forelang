@@ -1,18 +1,7 @@
 
-// fortune.js - draw fortune and suggestions
-(() => {
-  const btn = document.querySelector('#fortune-btn');
-  const out = document.querySelector('#fortune-out');
-  if(!btn || !out) return;
-  const fortunes = [
-    {text:'大吉', adv:'宜：刷题、赶deadline、追番；忌：谈恋爱'},
-    {text:'中吉', adv:'宜：背单词、整理笔记；忌：熬夜'},
-    {text:'小吉', adv:'宜：多喝水、散步；忌：拖延'},
-    {text:'凶', adv:'宜：复盘；忌：冲动消费'},
-    {text:'大凶', adv:'宜：休息；忌：内耗'}
-  ];
-  btn.addEventListener('click', () => {
-    const pick = fortunes[Math.floor(Math.random()*fortunes.length)];
-    out.innerHTML = `今日运势：<b>${pick.text}</b><br>${pick.adv}`;
-  });
+(()=>{
+  const btn=document.querySelector('#fortune-btn'); const out=document.querySelector('#fortune-out');
+  if(!btn||!out) return;
+  const f=[{t:'大吉',a:'宜：刷题、赶deadline、追番；忌：谈恋爱'},{t:'中吉',a:'宜：背单词、整理笔记；忌：熬夜'},{t:'小吉',a:'宜：多喝水、散步；忌：拖延'},{t:'凶',a:'宜：复盘；忌：冲动消费'},{t:'大凶',a:'宜：休息；忌：内耗'}];
+  btn.addEventListener('click', ()=>{ const p=f[Math.floor(Math.random()*f.length)]; out.innerHTML=`今日运势：<b>${p.t}</b><br>${p.a}`; });
 })();

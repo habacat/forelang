@@ -8,7 +8,6 @@ layout: layouts/base.njk
 
 <div class="container">
   <aside class="toc">
-    <!-- markdown-it TOC will inject here if user adds [toc] -->
     {{ content | toc | safe }}
   </aside>
 
@@ -19,6 +18,7 @@ layout: layouts/base.njk
     <div class="article-end">
       <div class="small">copyright：{{ site.name }}</div>
       <div class="small">link of this page: {{ page.url | url }}</div>
+
       {% if tags and tags.length %}
       <div class="tags">
         {% for t in tags %}

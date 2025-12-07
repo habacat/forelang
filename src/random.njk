@@ -4,15 +4,9 @@ layout: layouts/base.njk
 title: 随机文章
 permalink: /random/index.html
 ---
-<div class="container">
-  <p>正在为你抽取一篇文章…</p>
-</div>
+<div class="container"><p>正在为你抽取一篇文章…</p></div>
 <script>
-  (function(){
-    const posts = [{% for p in collections.posts %}"{{ p.url }}",{% endfor %}];
-    if(posts.length){
-      const url = posts[Math.floor(Math.random()*posts.length)];
-      setTimeout(()=>location.href = url, 400);
-    }
+  (function(){ const posts=[{% for p in collections.posts %}"{{ p.url }}",{% endfor %}];
+    if(posts.length){ const url=posts[Math.floor(Math.random()*posts.length)]; setTimeout(()=>location.href=url,400); }
   })();
 </script>

@@ -8,7 +8,7 @@
         <button>最新文章</button>
         <div class="dropdown-menu">
           <ul>
-            {% for p in collections.posts | limit(5) %}
+            {% for p in collections.posts | slice(0,5) %}
               <li><a href="{{ p.url }}">{{ p.data.title }}</a></li>
             {% endfor %}
             <li><a href="{{ site.base }}latest/">查看全部 →</a></li>
@@ -36,12 +36,12 @@
 
     <div class="nav-right">
       <div class="avatar-wrap">
-        <a class="avatar" href="{{ site.about_url }}"><img src="{{ site.avatar }}" alt="avatar"/></a>
+        <a class="avatar" href="{{ site.about_url }}"><img src="{{ site.avatar }}" alt="avatar"></a>
         <div class="avatar-card">
           <div class="avatar-row icons">
-            <a href="{{ site.email }}" title="邮件" aria-label="email"><i class="fa-regular fa-envelope"></i></a>
-            <a href="https://github.com/kotokowa" title="GitHub" aria-label="github"><i class="fa-brands fa-github"></i></a>
-            <a href="https://space.bilibili.com/" title="bilibili" aria-label="bilibili"><i class="fa-brands fa-bilibili"></i></a>
+            <a href="{{ site.email }}" title="邮件"><i class="fa-regular fa-envelope"></i></a>
+            <a href="https://github.com/kotokowa" title="GitHub"><i class="fa-brands fa-github"></i></a>
+            <a href="https://space.bilibili.com/" title="bilibili"><i class="fa-brands fa-bilibili"></i></a>
           </div>
           <div id="site-run-days" class="avatar-row small"></div>
           <div class="avatar-row small"><button id="fortune-btn" class="btn btn-ghost small">抽取今日运势</button></div>

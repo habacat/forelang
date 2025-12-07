@@ -1,19 +1,16 @@
 {
   "name": "forelang-site",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Kotokowa forelang personal site (11ty + GitHub Pages)",
+  "description": "Kotokowa forelang site (11ty + GitHub Pages)",
   "scripts": {
-    "dev": "ELEVENTY_ENV=dev npx @11ty/eleventy --serve",
-    "build": "npx @11ty/eleventy",
-    "clean": "rm -rf _site"
+    "build": "npx @11ty/eleventy"
   },
   "dependencies": {
     "@11ty/eleventy": "^2.0.1",
     "markdown-it": "^14.1.0",
     "markdown-it-anchor": "^8.6.7",
     "markdown-it-katex": "^2.0.3",
-    "markdown-it-table-of-contents": "^0.6.0",
-    "slugify": "^1.6.6"
+    "markdown-it-table-of-contents": "^0.6.0"
   }
 }

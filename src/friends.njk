@@ -8,8 +8,6 @@ permalink: /friends/index.html
   <h1>友链</h1>
   <p class="small">增删请编辑 <code>src/_data/friends.json</code></p>
   <ul>
-    {% for f in friends %}
-      <li><a href="{{ f.url }}" target="_blank">{{ f.name }}</a></li>
-    {% endfor %}
+    {% for f in friends %}<li><a href="{{ f.url }}" target="_blank">{{ f.name }}</a></li>{% endfor %}
   </ul>
 </div>
