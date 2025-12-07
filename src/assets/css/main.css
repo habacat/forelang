@@ -5,7 +5,7 @@
 html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans",sans-serif;background:var(--bg);color:var(--text);scroll-behavior:smooth}
 a{color:inherit;text-decoration:none}img{max-width:100%;display:block}.container{width:min(1100px,96%);margin:0 auto}
 .topbar{position:sticky;top:0;z-index:1000;background:var(--brand-alpha);backdrop-filter:saturate(180%) blur(4px);box-shadow:0 1px 0 rgba(0,0,0,.06)}
-.nav{display:flex;align-items:center;justify-content:space-between;padding:2px 8px;min-height:34px;line-height:1}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:2px 8px;min-height:34px;max-height:34px;line-height:1}
 .nav-left,.nav-right{display:flex;align-items:center;gap:.6rem}
 .brand{font-weight:700;font-size:1rem;cursor:pointer}
 .dropdown{position:relative}
