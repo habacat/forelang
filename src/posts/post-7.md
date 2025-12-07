@@ -4,7 +4,7 @@ date: 2025-11-28
 layout: layouts/post.njk
 tags: [post, English]
 cover: /forelang/assets/img/cover-2.jpg
-summary: English: Phrasal Verbs 的摘要演示，便于目录页/搜索展示。
+summary: English Phrasal Verbs 的摘要演示，便于目录页/搜索展示。
 ---
 
 [toc]
